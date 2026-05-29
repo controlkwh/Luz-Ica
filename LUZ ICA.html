@@ -1,0 +1,231 @@
+
+
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Luz - Alquiler Ica</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f6f9;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        h2 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 25px;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        .section {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #3498db;
+        }
+        .section-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        .form-group {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        label {
+            font-size: 14px;
+            width: 55%;
+        }
+        input [type="number"] {
+            width: 40%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 14px;
+            text-align: right;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background-color: #2ecc71;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background-color: #27ae60;
+        }
+        .results {
+            margin-top: 25px;
+            display: none;
+        }
+        .result-card {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+        .piso1 { background-color: #e8f4fd; border: 1px solid #3498db; }
+        .piso2 { background-color: #eafaf1; border: 1px solid #2ecc71; }
+        .total-recibo { background-color: #fef9e7; border: 1px solid #f1c40f; }
+        .alert {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            display: none;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>⚡ Calculadora de Luz - Casa Ica</h2>
+    
+    <div id="error-msg" class="alert"></div>
+
+    <div class="section">
+        <div class="section-title">1. Datos del Recibo General</div>
+        <div class="form-group">
+            <label for="montoTotal">Monto Total del Recibo (S/.)</label>
+            <input type="number" id="montoTotal" step="0.01" placeholder="Ej. 150.50">
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-title" style="color: #3498db;">2. Primer Piso</div>
+        <div class="form-group">
+            <label for="p1Anterior">Lectura Anterior (kWh)</label>
+            <input type="number" id="p1Anterior" placeholder="Ej. 1240">
+        </div>
+        <div class="form-group">
+            <label for="p1Actual">Lectura Actual (kWh)</label>
+            <input type="number" id="p1Actual" placeholder="Ej. 1380">
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-title" style="color: #2ecc71;">3. Segundo Piso</div>
+        <div class="form-group">
+            <label for="p2Anterior">Lectura Anterior (kWh)</label>
+            <input type="number" id="p2Anterior" placeholder="Ej. 850">
+        </div>
+        <div class="form-group">
+            <label for="p2Actual">Lectura Actual (kWh)</label>
+            <input type="number" id="p2Actual" placeholder="Ej. 940">
+        </div>
+    </div>
+
+    <button onclick="calcularDivision()">Calcular Pagos</button>
+
+    <div id="resultados" class="results">
+        <h2>📋 Resonancia de Pagos</h2>
+        
+        <div class="result-card piso1">
+            <strong>Primer Piso:</strong><br>
+            Consumo: <span id="resConsumoP1">0</span> kWh<br>
+            <strong>Monto a pagar: S/. <span id="resPagoP1">0.00</span></strong>
+        </div>
+
+        <div class="result-card piso2">
+            <strong>Segundo Piso:</strong><br>
+            Consumo: <span id="resConsumoP2">0</span> kWh<br>
+            <strong>Monto a pagar: S/. <span id="resPagoP2">0.00</span></strong>
+        </div>
+
+        <div class="result-card total-recibo">
+            <strong>Suma de Control:</strong><br>
+            Consumo Total Calculado: <span id="resConsumoTotal">0</span> kWh<br>
+            Monto Total Distribuido: S/. <span id="resMontoTotal">0.00</span>
+        </div>
+    </div>
+</div>
+
+<script>
+function calcularDivision() {
+    // Obtener valores
+    const montoTotal = parseFloat(document.getElementById('montoTotal').value);
+    
+    const p1Anterior = parseFloat(document.getElementById('p1Anterior').value);
+    const p1Actual = parseFloat(document.getElementById('p1Actual').value);
+    
+    const p2Anterior = parseFloat(document.getElementById('p2Anterior').value);
+    const p2Actual = parseFloat(document.getElementById('p2Actual').value);
+
+    const errorMsg = document.getElementById('error-msg');
+    const resultadosDiv = document.getElementById('resultados');
+
+    // Validación simple
+    if (isNaN(montoTotal) || isNaN(p1Anterior) || isNaN(p1Actual) || isNaN(p2Anterior) || isNaN(p2Actual)) {
+        errorMsg.innerText = "Por favor, completa todos los campos con números válidos.";
+        errorMsg.style.display = "block";
+        resultadosDiv.style.style.display = "none";
+        return;
+    }
+
+    // Calcular consumos individuales
+    const consumoP1 = p1Actual - p1Anterior;
+    const consumoP2 = p2Actual - p2Anterior;
+
+    if (consumoP1 < 0 || consumoP2 < 0) {
+        errorMsg.innerText = "Error: La lectura actual no puede ser menor que la lectura anterior.";
+        errorMsg.style.display = "block";
+        resultadosDiv.style.display = "none";
+        return;
+    }
+
+    errorMsg.style.display = "none";
+
+    const consumoTotalCasas = consumoP1 + consumoP2;
+
+    // Evitar división por cero si nadie consumió nada
+    if (consumoTotalCasas === 0) {
+        errorMsg.innerText = "El consumo total de ambos pisos es 0. No hay consumo que dividir.";
+        errorMsg.style.display = "block";
+        return;
+    }
+
+    // Calcular cuánto le toca pagar a cada uno en base a su porcentaje de consumo
+    const pagoP1 = (consumoP1 / consumoTotalCasas) * montoTotal;
+    const pagoP2 = (consumoP2 / consumoTotalCasas) * montoTotal;
+
+    // Mostrar en la interfaz
+    document.getElementById('resConsumoP1').innerText = consumoP1;
+    document.getElementById('resPagoP1').innerText = pagoP1.toFixed(2);
+
+    document.getElementById('resConsumoP2').innerText = consumoP2;
+    document.getElementById('resPagoP2').innerText = pagoP2.toFixed(2);
+
+    document.getElementById('resConsumoTotal').innerText = consumoTotalCasas;
+    document.getElementById('resMontoTotal').innerText = (pagoP1 + pagoP2).toFixed(2);
+
+    // Mostrar sección de resultados
+    resultadosDiv.style.display = "block";
+}
+</script>
+
+</body>
+</html>
