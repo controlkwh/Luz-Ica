@@ -1,58 +1,59 @@
 
 
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora de Luz - Alquiler Ica</title>
+    <title>Calculadora de Luz - Casa Ica</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f4f6f9;
             color: #333;
             margin: 0;
-            padding: 20px;
+            padding: 15px;
         }
         .container {
-            max-width: 600px;
+            max-width: 500px;
             margin: 0 auto;
             background: #ffffff;
-            padding: 30px;
+            padding: 20px;
             border-radius: 12px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
         h2 {
             color: #2c3e50;
             text-align: center;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             border-bottom: 2px solid #3498db;
             padding-bottom: 10px;
+            font-size: 22px;
         }
         .section {
             background: #f8f9fa;
             padding: 15px;
             border-radius: 8px;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             border-left: 4px solid #3498db;
         }
         .section-title {
             font-weight: bold;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
             color: #2c3e50;
+            font-size: 16px;
         }
         .form-group {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
         }
         label {
             font-size: 14px;
             width: 55%;
         }
-        input [type="number"] {
+        input[type="number"] {
             width: 40%;
             padding: 8px;
             border: 1px solid #ccc;
@@ -60,10 +61,46 @@
             font-size: 14px;
             text-align: right;
         }
-        button {
+        .switch-group {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px dashed #ccc;
+        }
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 26px;
+        }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px; width: 18px;
+            left: 4px; bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        input:checked + .slider { background-color: #e67e22; }
+        input:checked + .slider:before { transform: translateX(24px); }
+
+        /* BOTONES */
+        .btn-calcular {
             display: block;
             width: 100%;
-            padding: 12px;
+            padding: 14px;
             background-color: #2ecc71;
             color: white;
             border: none;
@@ -72,23 +109,79 @@
             font-weight: bold;
             cursor: pointer;
             transition: background 0.3s;
-        }
-        button:hover {
-            background-color: #27ae60;
-        }
-        .results {
-            margin-top: 25px;
-            display: none;
-        }
-        .result-card {
-            padding: 15px;
-            border-radius: 8px;
             margin-bottom: 10px;
-            font-size: 16px;
         }
-        .piso1 { background-color: #e8f4fd; border: 1px solid #3498db; }
-        .piso2 { background-color: #eafaf1; border: 1px solid #2ecc71; }
-        .total-recibo { background-color: #fef9e7; border: 1px solid #f1c40f; }
+        .btn-calcular:hover { background-color: #27ae60; }
+
+        .btn-limpiar {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-bottom: 20px;
+        }
+        .btn-limpiar:hover { background-color: #c0392b; }
+
+        .results { display: none; margin-top: 20px; }
+        
+        .recibo-digital {
+            background: #ffffff;
+            border: 2px solid #34495e;
+            border-radius: 8px;
+            padding: 18px;
+            margin-bottom: 25px;
+            position: relative;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .recibo-header {
+            text-align: center;
+            border-bottom: 1px dashed #34495e;
+            padding-bottom: 10px;
+            margin-bottom: 12px;
+        }
+        .recibo-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #2c3e50;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .recibo-fecha {
+            font-size: 11px;
+            color: #7f8c8d;
+            margin-top: 4px;
+        }
+        .recibo-linea {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        .recibo-total {
+            display: flex;
+            justify-content: space-between;
+            border-top: 1px solid #34495e;
+            padding-top: 10px;
+            margin-top: 12px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #c0392b;
+        }
+        .recibo-footer {
+            text-align: center;
+            font-size: 11px;
+            color: #95a5a6;
+            margin-top: 12px;
+            border-top: 1px dashed #ddd;
+            padding-top: 6px;
+        }
         .alert {
             background-color: #f8d7da;
             color: #721c24;
@@ -103,126 +196,233 @@
 <body>
 
 <div class="container">
-    <h2>⚡ Calculadora de Luz - Casa Ica</h2>
+    <h2>⚡ Luz - Casa Ica</h2>
     
     <div id="error-msg" class="alert"></div>
 
-    <div class="section">
-        <div class="section-title">1. Datos del Recibo General</div>
+    <div class="section" style="border-left-color: #e67e22;">
+        <div class="section-title"> Datos del Recibo General</div>
         <div class="form-group">
-            <label for="montoTotal">Monto Total del Recibo (S/.)</label>
-            <input type="number" id="montoTotal" step="0.01" placeholder="Ej. 150.50">
+            <label for="montoTotal">Monto Recibo Total (S/.)</label>
+            <input type="number" id="montoTotal" step="0.01" placeholder="0.00">
+        </div>
+        
+        <div class="switch-group">
+            <label style="font-weight: bold; color: #d35400;">¿Incluir Zona Común?</label>
+            <label class="switch">
+                <input type="checkbox" id="activarComun" onchange="toggleZonaComun()">
+                <span class="slider"></span>
+            </label>
+        </div>
+
+        <div class="form-group" id="grupoKwhTotal" style="display: none; margin-top: 12px;">
+            <label for="kwhTotal">Consumo Recibo Total (kWh)</label>
+            <input type="number" id="kwhTotal" placeholder="0">
         </div>
     </div>
 
-    <div class="section">
-        <div class="section-title" style="color: #3498db;">2. Primer Piso</div>
+    <div class="section" style="border-left-color: #3498db;">
+        <div class="section-title" style="color: #3498db;">1. Medidor Primer Piso</div>
         <div class="form-group">
             <label for="p1Anterior">Lectura Anterior (kWh)</label>
-            <input type="number" id="p1Anterior" placeholder="Ej. 1240">
+            <input type="number" id="p1Anterior" placeholder="0">
         </div>
         <div class="form-group">
             <label for="p1Actual">Lectura Actual (kWh)</label>
-            <input type="number" id="p1Actual" placeholder="Ej. 1380">
+            <input type="number" id="p1Actual" placeholder="0">
         </div>
     </div>
 
-    <div class="section">
-        <div class="section-title" style="color: #2ecc71;">3. Segundo Piso</div>
+    <div class="section" style="border-left-color: #2ecc71;">
+        <div class="section-title" style="color: #2ecc71;">2. Medidor Segundo Piso</div>
         <div class="form-group">
             <label for="p2Anterior">Lectura Anterior (kWh)</label>
-            <input type="number" id="p2Anterior" placeholder="Ej. 850">
+            <input type="number" id="p2Anterior" placeholder="0">
         </div>
         <div class="form-group">
             <label for="p2Actual">Lectura Actual (kWh)</label>
-            <input type="number" id="p2Actual" placeholder="Ej. 940">
+            <input type="number" id="p2Actual" placeholder="0">
         </div>
     </div>
 
-    <button onclick="calcularDivision()">Calcular Pagos</button>
+    <button class="btn-calcular" onclick="procesarCalculo()">Calcular Cuentas</button>
+    <button class="btn-limpiar" onclick="limpiarPantalla()">Borrar Todo</button>
 
     <div id="resultados" class="results">
-        <h2>📋 Resonancia de Pagos</h2>
+        <h3 style="text-align:center; color:#7f8c8d; font-size:14px; margin-bottom:15px;">👇 Listos para captura de pantalla 👇</h3>
         
-        <div class="result-card piso1">
-            <strong>Primer Piso:</strong><br>
-            Consumo: <span id="resConsumoP1">0</span> kWh<br>
-            <strong>Monto a pagar: S/. <span id="resPagoP1">0.00</span></strong>
+        <div class="recibo-digital">
+            <div class="recibo-header">
+                <div class="recibo-title">Recibo de Luz Interno</div>
+                <div style="font-size:13px; font-weight:bold; color:#3498db; margin-top:2px;">PRIMER PISO</div>
+                <div class="recibo-fecha" id="fechaP1"></div>
+            </div>
+            <div class="recibo-linea">
+                <span>Lectura Anterior:</span>
+                <strong><span id="lAntP1">0</span> kWh</strong>
+            </div>
+            <div class="recibo-linea">
+                <span>Lectura Actual:</span>
+                <strong><span id="lActP1">0</span> kWh</strong>
+            </div>
+            <div class="recibo-linea" style="border-bottom: 1px dotted #ccc; padding-bottom: 6px;">
+                <span>Energía Consumida:</span>
+                <strong><span id="resConsumoP1">0</span> kWh</strong>
+            </div>
+            <div class="recibo-linea" style="margin-top: 8px;">
+                <span>Costo Energía Propia:</span>
+                <span>S/. <span id="resLuzP1">0.00</span></span>
+            </div>
+            <div class="recibo-linea" id="lineaComunP1" style="display:none; color:#e67e22;">
+                <span>Cuota Zona Común (50%):</span>
+                <span>S/. <span id="resCuotaComunP1">0.00</span></span>
+            </div>
+            <div class="recibo-total">
+                <span>TOTAL A PAGAR:</span>
+                <span>S/. <span id="totalP1">0.00</span></span>
+            </div>
+            <div class="recibo-footer">Casa Ica • Control Interno</div>
         </div>
 
-        <div class="result-card piso2">
-            <strong>Segundo Piso:</strong><br>
-            Consumo: <span id="resConsumoP2">0</span> kWh<br>
-            <strong>Monto a pagar: S/. <span id="resPagoP2">0.00</span></strong>
-        </div>
-
-        <div class="result-card total-recibo">
-            <strong>Suma de Control:</strong><br>
-            Consumo Total Calculado: <span id="resConsumoTotal">0</span> kWh<br>
-            Monto Total Distribuido: S/. <span id="resMontoTotal">0.00</span>
+        <div class="recibo-digital">
+            <div class="recibo-header">
+                <div class="recibo-title">Recibo de Luz Interno</div>
+                <div style="font-size:13px; font-weight:bold; color:#2ecc71; margin-top:2px;">SEGUNDO PISO</div>
+                <div class="recibo-fecha" id="fechaP2"></div>
+            </div>
+            <div class="recibo-linea">
+                <span>Lectura Anterior:</span>
+                <strong><span id="lAntP2">0</span> kWh</strong>
+            </div>
+            <div class="recibo-linea">
+                <span>Lectura Actual:</span>
+                <strong><span id="lActP2">0</span> kWh</strong>
+            </div>
+            <div class="recibo-linea" style="border-bottom: 1px dotted #ccc; padding-bottom: 6px;">
+                <span>Energía Consumida:</span>
+                <strong><span id="resConsumoP2">0</span> kWh</strong>
+            </div>
+            <div class="recibo-linea" style="margin-top: 8px;">
+                <span>Costo Energía Propia:</span>
+                <span>S/. <span id="resLuzP2">0.00</span></span>
+            </div>
+            <div class="recibo-linea" id="lineaComunP2" style="display:none; color:#e67e22;">
+                <span>Cuota Zona Común (50%):</span>
+                <span>S/. <span id="resCuotaComunP2">0.00</span></span>
+            </div>
+            <div class="recibo-total">
+                <span>TOTAL A PAGAR:</span>
+                <span>S/. <span id="totalP2">0.00</span></span>
+            </div>
+            <div class="recibo-footer">Casa Ica • Control Interno</div>
         </div>
     </div>
 </div>
 
 <script>
-function calcularDivision() {
-    // Obtener valores
-    const montoTotal = parseFloat(document.getElementById('montoTotal').value);
+function toggleZonaComun() {
+    const checkComun = document.getElementById('activarComun').checked;
+    document.getElementById('grupoKwhTotal').style.display = checkComun ? "flex" : "none";
+}
+
+function limpiarPantalla() {
+    // Limpia todas las casillas numéricas
+    document.getElementById('montoTotal').value = '';
+    document.getElementById('kwhTotal').value = '';
+    document.getElementById('p1Anterior').value = '';
+    document.getElementById('p1Actual').value = '';
+    document.getElementById('p2Anterior').value = '';
+    document.getElementById('p2Actual').value = '';
+    
+    // Apaga el switch de zona común y oculta su casilla
+    document.getElementById('activarComun').checked = false;
+    document.getElementById('grupoKwhTotal').style.display = "none";
+    
+    // Oculta los resultados y errores
+    document.getElementById('resultados').style.display = "none";
+    document.getElementById('error-msg').style.display = "none";
+}
+
+function procesarCalculo() {
+    const montoTotal = parseFloat(document.getElementById('montoTotal').value) || 0;
+    const conZonaComun = document.getElementById('activarComun').checked;
+    const kwhTotalRecibo = parseFloat(document.getElementById('kwhTotal').value) || 0;
     
     const p1Anterior = parseFloat(document.getElementById('p1Anterior').value);
     const p1Actual = parseFloat(document.getElementById('p1Actual').value);
-    
     const p2Anterior = parseFloat(document.getElementById('p2Anterior').value);
     const p2Actual = parseFloat(document.getElementById('p2Actual').value);
 
     const errorMsg = document.getElementById('error-msg');
     const resultadosDiv = document.getElementById('resultados');
 
-    // Validación simple
-    if (isNaN(montoTotal) || isNaN(p1Anterior) || isNaN(p1Actual) || isNaN(p2Anterior) || isNaN(p2Actual)) {
-        errorMsg.innerText = "Por favor, completa todos los campos con números válidos.";
-        errorMsg.style.display = "block";
-        resultadosDiv.style.style.display = "none";
-        return;
+    if (isNaN(p1Anterior) || isNaN(p1Actual) || isNaN(p2Anterior) || isNaN(p2Actual) || montoTotal <= 0) {
+        errorMsg.innerText = "Por favor, completa el monto del recibo y las lecturas de los pisos.";
+        errorMsg.style.display = "block"; resultadosDiv.style.display = "none"; return;
+    }
+    if (conZonaComun && (isNaN(kwhTotalRecibo) || kwhTotalRecibo <= 0)) {
+        errorMsg.innerText = "Si activas la Zona Común, debes ingresar los kWh totales del recibo.";
+        errorMsg.style.display = "block"; resultadosDiv.style.display = "none"; return;
     }
 
-    // Calcular consumos individuales
     const consumoP1 = p1Actual - p1Anterior;
     const consumoP2 = p2Actual - p2Anterior;
 
     if (consumoP1 < 0 || consumoP2 < 0) {
-        errorMsg.innerText = "Error: La lectura actual no puede ser menor que la lectura anterior.";
-        errorMsg.style.display = "block";
-        resultadosDiv.style.display = "none";
-        return;
+        errorMsg.innerText = "Error: La lectura actual no puede ser menor que la anterior.";
+        errorMsg.style.display = "block"; resultadosDiv.style.display = "none"; return;
     }
 
     errorMsg.style.display = "none";
+    const sumaPisos = consumoP1 + consumoP2;
 
-    const consumoTotalCasas = consumoP1 + consumoP2;
+    let costoLuzP1 = 0, costoLuzP2 = 0, cuotaSobrantePorPiso = 0;
 
-    // Evitar división por cero si nadie consumió nada
-    if (consumoTotalCasas === 0) {
-        errorMsg.innerText = "El consumo total de ambos pisos es 0. No hay consumo que dividir.";
-        errorMsg.style.display = "block";
-        return;
+    if (conZonaComun) {
+        const precioPorKwh = montoTotal / kwhTotalRecibo;
+        costoLuzP1 = consumoP1 * precioPorKwh;
+        costoLuzP2 = consumoP2 * precioPorKwh;
+        const costoSobranteTotal = montoTotal - (costoLuzP1 + costoLuzP2);
+        cuotaSobrantePorPiso = costoSobranteTotal / 2;
+
+        document.getElementById('lineaComunP1').style.display = "flex";
+        document.getElementById('lineaComunP2').style.display = "flex";
+    } else {
+        if (sumaPisos === 0) {
+            errorMsg.innerText = "El consumo de los pisos es 0. No se puede dividir el recibo.";
+            errorMsg.style.display = "block"; return;
+        }
+        costoLuzP1 = (consumoP1 / sumaPisos) * montoTotal;
+        costoLuzP2 = (consumoP2 / sumaPisos) * montoTotal;
+        
+        document.getElementById('lineaComunP1').style.display = "none";
+        document.getElementById('lineaComunP2').style.display = "none";
     }
 
-    // Calcular cuánto le toca pagar a cada uno en base a su porcentaje de consumo
-    const pagoP1 = (consumoP1 / consumoTotalCasas) * montoTotal;
-    const pagoP2 = (consumoP2 / consumoTotalCasas) * montoTotal;
+    const finalP1 = costoLuzP1 + cuotaSobrantePorPiso;
+    const finalP2 = costoLuzP2 + cuotaSobrantePorPiso;
 
-    // Mostrar en la interfaz
+    // Obtener fecha y hora local de Perú
+    const opcionesFecha = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
+    const fechaEmision = new Date().toLocaleString('es-PE', opcionesFecha);
+
+    // Colocar datos en las boletas virtuales
+    document.getElementById('fechaP1').innerText = "Emisión: " + fechaEmision;
+    document.getElementById('lAntP1').innerText = p1Anterior;
+    document.getElementById('lActP1').innerText = p1Actual;
     document.getElementById('resConsumoP1').innerText = consumoP1;
-    document.getElementById('resPagoP1').innerText = pagoP1.toFixed(2);
+    document.getElementById('resLuzP1').innerText = costoLuzP1.toFixed(2);
+    document.getElementById('resCuotaComunP1').innerText = cuotaSobrantePorPiso.toFixed(2);
+    document.getElementById('totalP1').innerText = finalP1.toFixed(2);
 
+    document.getElementById('fechaP2').innerText = "Emisión: " + fechaEmision;
+    document.getElementById('lAntP2').innerText = p2Anterior;
+    document.getElementById('lActP2').innerText = p2Actual;
     document.getElementById('resConsumoP2').innerText = consumoP2;
-    document.getElementById('resPagoP2').innerText = pagoP2.toFixed(2);
+    document.getElementById('resLuzP2').innerText = costoLuzP2.toFixed(2);
+    document.getElementById('resCuotaComunP2').innerText = cuotaSobrantePorPiso.toFixed(2);
+    document.getElementById('totalP2').innerText = finalP2.toFixed(2);
 
-    document.getElementById('resConsumoTotal').innerText = consumoTotalCasas;
-    document.getElementById('resMontoTotal').innerText = (pagoP1 + pagoP2).toFixed(2);
-
-    // Mostrar sección de resultados
     resultadosDiv.style.display = "block";
 }
 </script>
